@@ -40,6 +40,19 @@ function App() {
     return () => subscription.unsubscribe()
   }, [])
 
+  async function sendAutomaticWeeklyReport() {
+  try {
+    const { data, error } = await supabase
+      .from('weekly_reports')
+      .insert([{ sent_at: new Date().toISOString() }]);
+
+    if (error) throw error;
+    console.log("✅ Weekly report sent successfully!");
+  } catch (err) {
+    console.error("❌ Error sending weekly report:", err);
+  }
+}
+
   useEffect(() => {
   const setupAutomaticEmails = () => {
     // Check if it's Monday and time to send weekly report
